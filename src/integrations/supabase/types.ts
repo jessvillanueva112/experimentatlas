@@ -55,6 +55,30 @@ export type Database = {
           },
         ]
       }
+      anonymous_request_limits: {
+        Row: {
+          client_identifier: string
+          created_at: string | null
+          id: string
+          request_count: number | null
+          window_start: string | null
+        }
+        Insert: {
+          client_identifier: string
+          created_at?: string | null
+          id?: string
+          request_count?: number | null
+          window_start?: string | null
+        }
+        Update: {
+          client_identifier?: string
+          created_at?: string | null
+          id?: string
+          request_count?: number | null
+          window_start?: string | null
+        }
+        Relationships: []
+      }
       connections: {
         Row: {
           addressee_id: string
@@ -563,7 +587,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      check_anonymous_rate_limit: {
+        Args: {
+          client_id: string
+          max_requests?: number
+          window_minutes?: number
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       connection_status: "pending" | "accepted" | "blocked"
