@@ -5,6 +5,8 @@ import { Dashboard } from "@/components/Dashboard";
 import { EventHub } from "@/components/EventHub";
 import { PeerMatching } from "@/components/PeerMatching";
 import { SupportHub } from "@/components/SupportHub";
+import Adventures from "@/components/Adventures";
+import Rewards from "@/components/Rewards";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
@@ -16,7 +18,8 @@ import {
   User,
   Sparkles,
   Headphones,
-  LogOut
+  LogOut,
+  Map
 } from "lucide-react";
 
 const Index = () => {
@@ -66,10 +69,10 @@ const Index = () => {
 
   const navigationItems = [
     { id: "dashboard", label: "Dashboard", icon: Home },
+    { id: "adventures", label: "Adventures", icon: Map },
     { id: "events", label: "Events", icon: Calendar },
     { id: "community", label: "Community", icon: Users },
     { id: "support", label: "Support", icon: Headphones },
-    { id: "messages", label: "Messages", icon: MessageCircle },
     { id: "rewards", label: "Rewards", icon: Award },
     { id: "profile", label: "Profile", icon: User },
   ];
@@ -89,36 +92,16 @@ const Index = () => {
     switch (activeTab) {
       case "dashboard":
         return <Dashboard user={userProfile} />;
+      case "adventures":
+        return <Adventures />;
       case "events":
         return <EventHub />;
       case "community":
         return <PeerMatching />;
       case "support":
         return <SupportHub />;
-      case "messages":
-        return (
-          <div className="min-h-screen bg-background flex items-center justify-center">
-            <div className="text-center">
-              <MessageCircle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Messages Coming Soon!</h3>
-              <p className="text-muted-foreground">
-                Real-time messaging features are in development.
-              </p>
-            </div>
-          </div>
-        );
       case "rewards":
-        return (
-          <div className="min-h-screen bg-background flex items-center justify-center">
-            <div className="text-center">
-              <Award className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Rewards System Coming Soon!</h3>
-              <p className="text-muted-foreground">
-                Gamification and achievement features are in development.
-              </p>
-            </div>
-          </div>
-        );
+        return <Rewards />;
       case "profile":
         return (
           <div className="min-h-screen bg-background flex items-center justify-center">

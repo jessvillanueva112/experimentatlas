@@ -20,7 +20,8 @@ import {
   Clock,
   Sparkles,
   Filter,
-  Shuffle
+  Shuffle,
+  Briefcase
 } from "lucide-react";
 
 interface PeerProfile {
@@ -457,15 +458,90 @@ export function PeerMatching() {
 
           {/* Study Groups Tab */}
           <TabsContent value="groups" className="space-y-6">
-            <div className="text-center py-12">
-              <Coffee className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Study Groups Coming Soon!</h3>
-              <p className="text-muted-foreground mb-4">
-                We're working on building amazing study group features for you.
-              </p>
-              <Button variant="outline">
-                Join Waitlist
-              </Button>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Study Buddy Matching */}
+              <Card className="border-2 border-dashed border-primary/30 hover:border-primary/60 transition-colors">
+                <CardContent className="p-6 text-center">
+                  <BookOpen className="w-12 h-12 text-primary mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">Find Study Buddies</h3>
+                  <p className="text-muted-foreground mb-4 text-sm">
+                    Get matched with peers in your courses for study sessions
+                  </p>
+                  <Button className="w-full">
+                    Start Matching
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Group Study Sessions */}
+              <Card className="border-2 border-dashed border-blue-300 hover:border-blue-500 transition-colors">
+                <CardContent className="p-6 text-center">
+                  <Users className="w-12 h-12 text-blue-500 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">Join Study Groups</h3>
+                  <p className="text-muted-foreground mb-4 text-sm">
+                    Find or create study groups for your subjects
+                  </p>
+                  <Button variant="outline" className="w-full">
+                    Browse Groups
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Peer Mentorship */}
+              <Card className="border-2 border-dashed border-green-300 hover:border-green-500 transition-colors">
+                <CardContent className="p-6 text-center">
+                  <Star className="w-12 h-12 text-green-500 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">Get a Mentor</h3>
+                  <p className="text-muted-foreground mb-4 text-sm">
+                    Connect with upper-year students for guidance
+                  </p>
+                  <Button variant="outline" className="w-full">
+                    Find Mentors
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Language Exchange */}
+              <Card className="border-2 border-dashed border-purple-300 hover:border-purple-500 transition-colors">
+                <CardContent className="p-6 text-center">
+                  <Globe className="w-12 h-12 text-purple-500 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">Language Exchange</h3>
+                  <p className="text-muted-foreground mb-4 text-sm">
+                    Practice languages with native speakers
+                  </p>
+                  <Button variant="outline" className="w-full">
+                    Start Exchange
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Career Connections */}
+              <Card className="border-2 border-dashed border-orange-300 hover:border-orange-500 transition-colors">
+                <CardContent className="p-6 text-center">
+                  <Briefcase className="w-12 h-12 text-orange-500 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">Career Network</h3>
+                  <p className="text-muted-foreground mb-4 text-sm">
+                    Connect with peers for career opportunities
+                  </p>
+                  <Button variant="outline" className="w-full">
+                    Build Network
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Social Meetups */}
+              <Card className="border-2 border-dashed border-pink-300 hover:border-pink-500 transition-colors">
+                <CardContent className="p-6 text-center">
+                  <Coffee className="w-12 h-12 text-pink-500 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">Social Meetups</h3>
+                  <p className="text-muted-foreground mb-4 text-sm">
+                    Join casual meetups and social activities
+                  </p>
+                  <Button variant="outline" className="w-full">
+                    Join Meetups
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
           </TabsContent>
         </Tabs>
