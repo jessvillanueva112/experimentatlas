@@ -1,8 +1,11 @@
+import { useState } from "react";
+import { WellnessCheckin } from "@/components/WellnessCheckin";
 import { Button } from "@/components/ui/button";
 import { ProactiveNotifications } from "@/components/ProactiveNotifications";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { 
   Calendar, 
   Users, 
@@ -31,6 +34,7 @@ interface DashboardProps {
 }
 
 export function Dashboard({ user }: DashboardProps) {
+  const [showWellnessCheckin, setShowWellnessCheckin] = useState(false);
   const quickActions = [
     { icon: Calendar, label: "Events", description: "Find events & activities", color: "bg-primary" },
     { icon: Users, label: "Community", description: "Connect with peers", color: "bg-accent" },
@@ -145,9 +149,12 @@ export function Dashboard({ user }: DashboardProps) {
                 {user.program} • Year {user.year} • {user.university}
               </p>
             </div>
-            <Button variant="hero" className="w-fit">
+            <Button 
+              onClick={() => setShowWellnessCheckin(true)}
+              className="w-fit bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90"
+            >
               Complete Your Weekly Check-in
-              <Heart className="w-4 h-4" />
+              <Heart className="w-4 h-4 ml-2" />
             </Button>
           </div>
         </div>
@@ -298,6 +305,16 @@ export function Dashboard({ user }: DashboardProps) {
           </div>
         </div>
       </div>
+
+      {/* Wellness Check-in Modal */}
+      <Dialog open={showWellnessCheckin} onOpenChange={setShowWellnessCheckin}>
+        <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Weekly Wellness Check-in</DialogTitle>
+          </DialogHeader>
+          <WellnessCheckin />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

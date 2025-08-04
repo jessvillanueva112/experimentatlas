@@ -330,6 +330,45 @@ export type Database = {
           },
         ]
       }
+      peer_interventions: {
+        Row: {
+          ambassador_id: string | null
+          contact_method: string
+          created_at: string
+          id: string
+          intervention_notes: string | null
+          introduction_approach: string
+          status: string
+          trigger_reason: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ambassador_id?: string | null
+          contact_method: string
+          created_at?: string
+          id?: string
+          intervention_notes?: string | null
+          introduction_approach: string
+          status?: string
+          trigger_reason: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ambassador_id?: string | null
+          contact_method?: string
+          created_at?: string
+          id?: string
+          intervention_notes?: string | null
+          introduction_approach?: string
+          status?: string
+          trigger_reason?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -405,6 +444,36 @@ export type Database = {
         }
         Relationships: []
       }
+      risk_assessments: {
+        Row: {
+          academic_score: number
+          calculated_at: string
+          engagement_score: number
+          id: string
+          overall_risk_level: string
+          user_id: string
+          wellness_score: number
+        }
+        Insert: {
+          academic_score: number
+          calculated_at?: string
+          engagement_score: number
+          id?: string
+          overall_risk_level: string
+          user_id: string
+          wellness_score: number
+        }
+        Update: {
+          academic_score?: number
+          calculated_at?: string
+          engagement_score?: number
+          id?: string
+          overall_risk_level?: string
+          user_id?: string
+          wellness_score?: number
+        }
+        Relationships: []
+      }
       support_requests: {
         Row: {
           assigned_counselor_id: string | null
@@ -464,6 +533,69 @@ export type Database = {
             referencedColumns: ["user_id"]
           },
         ]
+      }
+      user_engagement_logs: {
+        Row: {
+          action_type: string
+          created_at: string
+          feature_used: string | null
+          id: string
+          session_duration: number | null
+          user_id: string
+        }
+        Insert: {
+          action_type: string
+          created_at?: string
+          feature_used?: string | null
+          id?: string
+          session_duration?: number | null
+          user_id: string
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          feature_used?: string | null
+          id?: string
+          session_duration?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wellness_checkins: {
+        Row: {
+          academic_stress: number
+          created_at: string
+          homesickness_level: number
+          id: string
+          mood_rating: number
+          notes: string | null
+          sleep_quality: number
+          stress_level: number
+          user_id: string
+        }
+        Insert: {
+          academic_stress: number
+          created_at?: string
+          homesickness_level: number
+          id?: string
+          mood_rating: number
+          notes?: string | null
+          sleep_quality: number
+          stress_level: number
+          user_id: string
+        }
+        Update: {
+          academic_stress?: number
+          created_at?: string
+          homesickness_level?: number
+          id?: string
+          mood_rating?: number
+          notes?: string | null
+          sleep_quality?: number
+          stress_level?: number
+          user_id?: string
+        }
+        Relationships: []
       }
     }
     Views: {
