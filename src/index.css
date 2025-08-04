@@ -2,41 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Atlas Student Support Platform Design System */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core brand colors - supportive and trustworthy */
+    --background: 220 15% 98%;
+    --foreground: 220 8% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 220 8% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 220 8% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - Calming blue for trust and support */
+    --primary: 213 94% 68%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 213 94% 85%;
+    --primary-dark: 213 94% 45%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Warm and welcoming */
+    --secondary: 45 86% 92%;
+    --secondary-foreground: 45 86% 25%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted tones */
+    --muted: 220 15% 95%;
+    --muted-foreground: 220 8% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent colors for engagement */
+    --accent: 168 76% 42%;
+    --accent-foreground: 0 0% 100%;
+    --accent-light: 168 76% 85%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Support colors */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Interactive elements */
+    --border: 220 15% 90%;
+    --input: 220 15% 90%;
+    --ring: 213 94% 68%;
 
-    --radius: 0.5rem;
+    /* Gradients for visual appeal */
+    --gradient-primary: linear-gradient(135deg, hsl(213 94% 68%), hsl(213 94% 45%));
+    --gradient-warm: linear-gradient(135deg, hsl(45 86% 85%), hsl(168 76% 85%));
+    --gradient-hero: linear-gradient(135deg, hsl(213 94% 68%) 0%, hsl(168 76% 42%) 100%);
+
+    /* Shadows */
+    --shadow-soft: 0 2px 8px -2px hsl(220 8% 15% / 0.1);
+    --shadow-medium: 0 4px 16px -4px hsl(220 8% 15% / 0.15);
+    --shadow-strong: 0 8px 32px -8px hsl(220 8% 15% / 0.2);
+
+    /* Spacing and sizing */
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
