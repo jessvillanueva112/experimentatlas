@@ -330,45 +330,6 @@ export type Database = {
           },
         ]
       }
-      peer_interventions: {
-        Row: {
-          ambassador_id: string | null
-          contact_method: string
-          created_at: string
-          id: string
-          intervention_notes: string | null
-          introduction_approach: string
-          status: string
-          trigger_reason: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          ambassador_id?: string | null
-          contact_method: string
-          created_at?: string
-          id?: string
-          intervention_notes?: string | null
-          introduction_approach: string
-          status?: string
-          trigger_reason: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          ambassador_id?: string | null
-          contact_method?: string
-          created_at?: string
-          id?: string
-          intervention_notes?: string | null
-          introduction_approach?: string
-          status?: string
-          trigger_reason?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       profiles: {
         Row: {
           avatar_url: string | null

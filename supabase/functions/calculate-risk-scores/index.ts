@@ -124,35 +124,12 @@ async function calculateUserRisk(supabase: any, userId: string) {
   return calculateRiskScore(riskFactors);
 }
 
-async function triggerInterventions(supabase: any, userId: string, riskLevel: RiskLevel) {
+async function logRiskAssessment(supabase: any, userId: string, riskLevel: RiskLevel) {
   if (riskLevel === 'low') return;
 
-  // Check if intervention already exists recently
-  const { data: existingIntervention } = await supabase
-    .from('peer_interventions')
-    .select('id')
-    .eq('user_id', userId)
-    .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
-    .single();
-
-  if (existingIntervention) return; // Don't spam interventions
-
-  // For demo, create a mock intervention
-  if (riskLevel === 'moderate' || riskLevel === 'severe') {
-    const { error } = await supabase
-      .from('peer_interventions')
-      .insert({
-        user_id: userId,
-        ambassador_id: null, // Would be assigned based on matching algorithm
-        trigger_reason: 'routine_wellness_check',
-        contact_method: 'in_app_introduction',
-        introduction_approach: riskLevel === 'severe' ? 'urgent_support' : 'friendly_checkin',
-        status: 'pending'
-      });
-
-    if (error) {
-      console.error('Error creating intervention:', error);
-    }
+  // For severe risk cases, log for professional referral
+  if (riskLevel === 'severe') {
+    console.log(`Severe risk detected for user ${userId} - professional referral recommended`);
   }
 }
 
@@ -194,8 +171,8 @@ serve(async (req) => {
             });
 
           if (!error) {
-            // Trigger interventions if needed
-            await triggerInterventions(supabaseClient, userId, riskAssessment.level);
+            // Log risk assessment for monitoring
+            await logRiskAssessment(supabaseClient, userId, riskAssessment.level);
           }
 
           results.push({
