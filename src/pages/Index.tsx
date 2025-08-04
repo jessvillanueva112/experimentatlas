@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dashboard } from "@/components/Dashboard";
 import { EventHub } from "@/components/EventHub";
 import { PeerMatching } from "@/components/PeerMatching";
+import { SupportHub } from "@/components/SupportHub";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
@@ -11,7 +12,8 @@ import {
   MessageCircle, 
   Award, 
   User,
-  Sparkles
+  Sparkles,
+  Headphones
 } from "lucide-react";
 
 const Index = () => {
@@ -30,6 +32,7 @@ const Index = () => {
     { id: "dashboard", label: "Dashboard", icon: Home },
     { id: "events", label: "Events", icon: Calendar },
     { id: "community", label: "Community", icon: Users },
+    { id: "support", label: "Support", icon: Headphones },
     { id: "messages", label: "Messages", icon: MessageCircle },
     { id: "rewards", label: "Rewards", icon: Award },
     { id: "profile", label: "Profile", icon: User },
@@ -43,6 +46,8 @@ const Index = () => {
         return <EventHub />;
       case "community":
         return <PeerMatching />;
+      case "support":
+        return <SupportHub />;
       case "messages":
         return (
           <div className="min-h-screen bg-background flex items-center justify-center">
@@ -89,7 +94,7 @@ const Index = () => {
       {/* Mobile Navigation */}
       <div className="lg:hidden">
         <div className="fixed bottom-0 left-0 right-0 bg-card border-t z-50">
-          <div className="grid grid-cols-6 gap-1 p-2">
+          <div className="grid grid-cols-7 gap-1 p-2">
             {navigationItems.map((item) => (
               <Button
                 key={item.id}

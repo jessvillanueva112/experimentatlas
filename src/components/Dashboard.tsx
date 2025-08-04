@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ProactiveNotifications } from "@/components/ProactiveNotifications";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -225,6 +226,9 @@ export function Dashboard({ user }: DashboardProps) {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Proactive Notifications */}
+            <ProactiveNotifications />
+
             {/* Peer Suggestions */}
             <Card>
               <CardHeader>
