@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Dashboard } from "@/components/Dashboard";
 import { EventHub } from "@/components/EventHub";
-import { PeerMatching } from "@/components/PeerMatching";
+import { PeerSupport } from "@/components/PeerMatching";
 import { SupportHub } from "@/components/SupportHub";
 import Adventures from "@/components/Adventures";
 import Rewards from "@/components/Rewards";
@@ -97,7 +97,7 @@ const Index = () => {
       case "events":
         return <EventHub />;
       case "community":
-        return <PeerMatching />;
+        return <PeerSupport />;
       case "support":
         return <SupportHub />;
       case "rewards":

@@ -52,7 +52,7 @@ interface Connection {
   unreadCount: number;
 }
 
-export function PeerMatching() {
+export function PeerSupport() {
   const [activeTab, setActiveTab] = useState("discover");
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
