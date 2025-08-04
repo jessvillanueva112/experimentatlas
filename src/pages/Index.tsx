@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { Dashboard } from "@/components/Dashboard";
 import { EventHub } from "@/components/EventHub";
 import { PeerMatching } from "@/components/PeerMatching";
@@ -13,19 +15,53 @@ import {
   Award, 
   User,
   Sparkles,
-  Headphones
+  Headphones,
+  LogOut
 } from "lucide-react";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [userProfile, setUserProfile] = useState(null);
+  const { user, signOut } = useAuth();
 
-  // Mock user data - in a real app this would come from authentication
-  const mockUser = {
-    name: "Alex Thompson",
-    university: "University of British Columbia",
-    program: "Computer Science", 
-    year: 1,
-    profilePhoto: undefined
+  useEffect(() => {
+    if (user) {
+      fetchUserProfile();
+    }
+  }, [user]);
+
+  const fetchUserProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', user?.id)
+        .single();
+
+      if (error) throw error;
+      
+      setUserProfile({
+        name: data.display_name || `${data.first_name} ${data.last_name}`,
+        university: data.university,
+        program: data.program || "Not specified",
+        year: data.year_of_study || 1,
+        profilePhoto: data.avatar_url
+      });
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      // Fallback data
+      setUserProfile({
+        name: user?.email?.split('@')[0] || 'Student',
+        university: "University",
+        program: "Not specified",
+        year: 1,
+        profilePhoto: undefined
+      });
+    }
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
   };
 
   const navigationItems = [
@@ -39,9 +75,20 @@ const Index = () => {
   ];
 
   const renderContent = () => {
+    if (!userProfile) {
+      return (
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading your profile...</p>
+          </div>
+        </div>
+      );
+    }
+
     switch (activeTab) {
       case "dashboard":
-        return <Dashboard user={mockUser} />;
+        return <Dashboard user={userProfile} />;
       case "events":
         return <EventHub />;
       case "community":
@@ -85,7 +132,7 @@ const Index = () => {
           </div>
         );
       default:
-        return <Dashboard user={mockUser} />;
+        return <Dashboard user={userProfile} />;
     }
   };
 
@@ -118,13 +165,23 @@ const Index = () => {
       <div className="hidden lg:flex">
         <div className="fixed left-0 top-0 h-full w-64 bg-card border-r z-40">
           <div className="p-6">
-            <div className="flex items-center gap-2 mb-8">
-              <div className="w-10 h-10 bg-gradient-to-r from-primary to-accent rounded-lg flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-white" />
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 bg-gradient-to-r from-primary to-accent rounded-lg flex items-center justify-center">
+                  <Sparkles className="w-6 h-6 text-white" />
+                </div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  Atlas
+                </h1>
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Atlas
-              </h1>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleSignOut}
+                className="text-muted-foreground hover:text-destructive"
+              >
+                <LogOut className="w-4 h-4" />
+              </Button>
             </div>
             
             <nav className="space-y-2">
