@@ -1,10 +1,42 @@
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
+
+// Rate limiting storage
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT_WINDOW = 5 * 60 * 1000; // 5 minutes
+const RATE_LIMIT_MAX_REQUESTS = 10;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Input validation functions
+function validateUserId(userId: string): boolean {
+  if (!userId || typeof userId !== 'string') return false;
+  // UUID validation pattern
+  const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidPattern.test(userId);
+}
+
+function checkRateLimit(identifier: string): boolean {
+  const now = Date.now();
+  const userLimit = rateLimitMap.get(identifier);
+  
+  if (!userLimit || now > userLimit.resetTime) {
+    // Reset or initialize rate limit
+    rateLimitMap.set(identifier, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+    return true;
+  }
+  
+  if (userLimit.count >= RATE_LIMIT_MAX_REQUESTS) {
+    return false; // Rate limit exceeded
+  }
+  
+  userLimit.count++;
+  return true;
+}
 
 interface RiskFactors {
   // Wellness metrics (40% weight)
@@ -127,9 +159,16 @@ async function calculateUserRisk(supabase: any, userId: string) {
 async function logRiskAssessment(supabase: any, userId: string, riskLevel: RiskLevel) {
   if (riskLevel === 'low') return;
 
-  // For severe risk cases, log for professional referral
+  // For severe risk cases, log for professional referral (hash user ID for privacy)
   if (riskLevel === 'severe') {
-    console.log(`Severe risk detected for user ${userId} - professional referral recommended`);
+    const hashedUserId = await crypto.subtle.digest(
+      'SHA-256',
+      new TextEncoder().encode(userId + 'risk_salt_2024')
+    );
+    const hashedHex = Array.from(new Uint8Array(hashedUserId))
+      .map(b => b.toString(16).padStart(2, '0')).join('');
+    
+    console.log(`Severe risk detected for user hash ${hashedHex.substring(0, 8)} - professional referral recommended`);
   }
 }
 
@@ -137,6 +176,22 @@ serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
+  }
+
+  // Get client identifier for rate limiting
+  const clientIP = req.headers.get('cf-connecting-ip') || 
+                   req.headers.get('x-forwarded-for') || 
+                   'unknown';
+  
+  // Check rate limit
+  if (!checkRateLimit(clientIP)) {
+    return new Response(
+      JSON.stringify({ error: 'Rate limit exceeded. Please try again later.' }),
+      { 
+        status: 429, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      }
+    );
   }
 
   try {
@@ -152,6 +207,12 @@ serve(async (req) => {
       .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
 
     const uniqueUsers = [...new Set(users?.map(u => u.user_id) || [])];
+    
+    // Limit batch size for security
+    if (uniqueUsers.length > 100) {
+      uniqueUsers.splice(100);
+    }
+    
     const results = [];
 
     for (const userId of uniqueUsers) {

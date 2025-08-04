@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { SecureInput } from "@/components/ui/secure-input";
+import { SecureTextarea } from "@/components/ui/secure-textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -280,11 +280,13 @@ export function SupportHub() {
               <CardContent className="space-y-4">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                  <Input
+                  <SecureInput
                     placeholder="e.g., 'I need help with housing' or 'feeling overwhelmed with studies'"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10 text-lg h-12"
+                    maxLength={200}
+                    sanitize={true}
                   />
                 </div>
                 
@@ -411,9 +413,11 @@ export function SupportHub() {
                 ))}
                 
                 <div className="pt-4">
-                  <Textarea
+                  <SecureTextarea
                     placeholder="Anything else you'd like to share? (Optional)"
                     className="min-h-[100px]"
+                    maxLength={500}
+                    sanitize={true}
                   />
                   <Button className="mt-3" variant="success">
                     <CheckCircle className="w-4 h-4 mr-2" />
@@ -462,9 +466,11 @@ export function SupportHub() {
 
                   <div>
                     <label className="text-sm font-medium">Describe your situation (optional)</label>
-                    <Textarea
+                    <SecureTextarea
                       placeholder="Share as much or as little as you're comfortable with..."
                       className="mt-2 min-h-[120px]"
+                      maxLength={1000}
+                      sanitize={true}
                     />
                   </div>
 

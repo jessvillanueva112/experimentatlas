@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Textarea } from "@/components/ui/textarea";
+import { SecureTextarea } from "@/components/ui/secure-textarea";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Heart, 
@@ -298,11 +298,13 @@ export const WellnessCheckin = () => {
           <label className="text-sm font-medium">
             Anything else you'd like to share? (Optional)
           </label>
-          <Textarea
+          <SecureTextarea
             value={checkinData.notes}
             onChange={(e) => setCheckinData(prev => ({ ...prev, notes: e.target.value }))}
             placeholder="Share what's on your mind, any challenges you're facing, or positive moments from your day..."
             rows={3}
+            maxLength={1000}
+            sanitize={true}
           />
         </div>
 
