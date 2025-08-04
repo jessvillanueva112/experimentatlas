@@ -2,10 +2,11 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 
-// Rate limiting storage
+// Rate limiting storage - Enhanced security
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-const RATE_LIMIT_WINDOW = 5 * 60 * 1000; // 5 minutes
-const RATE_LIMIT_MAX_REQUESTS = 10;
+const RATE_LIMIT_WINDOW = 10 * 60 * 1000; // 10 minutes for production security
+const RATE_LIMIT_MAX_REQUESTS = 5; // Reduced from 10 to 5 for enhanced security
+const MAX_BATCH_SIZE = 50; // Reduced from 100 to 50 for security
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -18,6 +19,10 @@ function validateUserId(userId: string): boolean {
   // UUID validation pattern
   const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   return uuidPattern.test(userId);
+}
+
+function validateBatchSize(size: number): boolean {
+  return typeof size === 'number' && size > 0 && size <= MAX_BATCH_SIZE;
 }
 
 function checkRateLimit(identifier: string): boolean {
@@ -208,9 +213,16 @@ serve(async (req) => {
 
     const uniqueUsers = [...new Set(users?.map(u => u.user_id) || [])];
     
-    // Limit batch size for security
-    if (uniqueUsers.length > 100) {
-      uniqueUsers.splice(100);
+    // Enhanced batch size validation for security
+    if (!validateBatchSize(uniqueUsers.length)) {
+      if (uniqueUsers.length > MAX_BATCH_SIZE) {
+        uniqueUsers.splice(MAX_BATCH_SIZE);
+      } else if (uniqueUsers.length === 0) {
+        return new Response(
+          JSON.stringify({ success: true, processedUsers: 0, message: 'No users to process' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+        );
+      }
     }
     
     const results = [];
@@ -236,10 +248,10 @@ serve(async (req) => {
             await logRiskAssessment(supabaseClient, userId, riskAssessment.level);
           }
 
+          // Only include non-sensitive data in results for security
           results.push({
-            userId,
             riskLevel: riskAssessment.level,
-            scores: riskAssessment.scores
+            overallScore: Math.round(riskAssessment.scores.overall * 100) / 100
           });
         }
       } catch (userError) {
@@ -251,7 +263,14 @@ serve(async (req) => {
       JSON.stringify({ 
         success: true, 
         processedUsers: results.length,
-        results: results.slice(0, 5) // Return first 5 for debugging
+        timestamp: new Date().toISOString(),
+        // Removed detailed results to prevent potential data exposure
+        summary: {
+          severe: results.filter(r => r.riskLevel === 'severe').length,
+          moderate: results.filter(r => r.riskLevel === 'moderate').length,
+          mild: results.filter(r => r.riskLevel === 'mild').length,
+          low: results.filter(r => r.riskLevel === 'low').length
+        }
       }), 
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
