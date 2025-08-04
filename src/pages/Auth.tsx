@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { SecureInput } from '@/components/ui/secure-input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -148,7 +148,7 @@ const Auth = () => {
                       <Mail className="w-4 h-4" />
                       Email
                     </Label>
-                    <Input
+                    <SecureInput
                       id="signin-email"
                       type="email"
                       placeholder="your.email@university.edu"
@@ -157,6 +157,7 @@ const Auth = () => {
                       required
                       maxLength={255}
                       className="transition-all duration-200"
+                      sanitize={true}
                     />
                   </div>
                   
@@ -165,7 +166,7 @@ const Auth = () => {
                       <Lock className="w-4 h-4" />
                       Password
                     </Label>
-                    <Input
+                    <SecureInput
                       id="signin-password"
                       type="password"
                       placeholder="Enter your password"
@@ -175,6 +176,7 @@ const Auth = () => {
                       minLength={6}
                       maxLength={128}
                       className="transition-all duration-200"
+                      sanitize={false}
                     />
                   </div>
                   
@@ -196,7 +198,7 @@ const Auth = () => {
                         <User className="w-4 h-4" />
                         First Name
                       </Label>
-                      <Input
+                      <SecureInput
                         id="signup-firstname"
                         type="text"
                         placeholder="John"
@@ -204,12 +206,13 @@ const Auth = () => {
                         onChange={(e) => setSignUpData(prev => ({ ...prev, firstName: e.target.value }))}
                         required
                         maxLength={50}
+                        sanitize={true}
                       />
                     </div>
                     
                     <div className="space-y-2">
                       <Label htmlFor="signup-lastname">Last Name</Label>
-                      <Input
+                      <SecureInput
                         id="signup-lastname"
                         type="text"
                         placeholder="Smith"
@@ -217,6 +220,7 @@ const Auth = () => {
                         onChange={(e) => setSignUpData(prev => ({ ...prev, lastName: e.target.value }))}
                         required
                         maxLength={50}
+                        sanitize={true}
                       />
                     </div>
                   </div>
@@ -226,7 +230,7 @@ const Auth = () => {
                       <Mail className="w-4 h-4" />
                       Email
                     </Label>
-                    <Input
+                    <SecureInput
                       id="signup-email"
                       type="email"
                       placeholder="your.email@university.edu"
@@ -234,6 +238,7 @@ const Auth = () => {
                       onChange={(e) => setSignUpData(prev => ({ ...prev, email: e.target.value }))}
                       required
                       maxLength={255}
+                      sanitize={true}
                     />
                   </div>
                   
@@ -242,7 +247,7 @@ const Auth = () => {
                       <GraduationCap className="w-4 h-4" />
                       University
                     </Label>
-                    <Input
+                    <SecureInput
                       id="signup-university"
                       type="text"
                       placeholder="University of British Columbia"
@@ -250,6 +255,7 @@ const Auth = () => {
                       onChange={(e) => setSignUpData(prev => ({ ...prev, university: e.target.value }))}
                       required
                       maxLength={100}
+                      sanitize={true}
                     />
                   </div>
                   
@@ -287,7 +293,7 @@ const Auth = () => {
                       <Lock className="w-4 h-4" />
                       Password
                     </Label>
-                    <Input
+                    <SecureInput
                       id="signup-password"
                       type="password"
                       placeholder="Create a secure password"
@@ -296,12 +302,13 @@ const Auth = () => {
                       required
                       minLength={6}
                       maxLength={128}
+                      sanitize={false}
                     />
                   </div>
                   
                   <div className="space-y-2">
                     <Label htmlFor="signup-confirm-password">Confirm Password</Label>
-                    <Input
+                    <SecureInput
                       id="signup-confirm-password"
                       type="password"
                       placeholder="Confirm your password"
@@ -310,6 +317,7 @@ const Auth = () => {
                       required
                       minLength={6}
                       maxLength={128}
+                      sanitize={false}
                     />
                   </div>
                   

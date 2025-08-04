@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
+import { SecureTextarea } from "@/components/ui/secure-textarea";
 import { 
   MapPin, 
   Users, 
@@ -309,10 +310,12 @@ const Adventures = () => {
 
               {currentStepData.type === 'reflection' && (
                 <div className="space-y-4">
-                  <textarea
+                  <SecureTextarea
                     className="w-full p-3 border rounded-lg"
                     rows={4}
                     placeholder="Share your thoughts and reflections..."
+                    maxLength={1000}
+                    sanitize={true}
                   />
                   <Button onClick={() => completeStep(currentStepData.id)}>
                     Share Reflection
